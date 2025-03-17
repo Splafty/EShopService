@@ -87,21 +87,21 @@ public class CreditCardServiceTests
     [InlineData("3497 7965 8312 797", "American Express")]
     [InlineData("345-470-784-783-010", "American Express")]
     [InlineData("378523393817437", "American Express")]
-    [InlineData("4024-0071-6540-1778")]
-    [InlineData("4532 2080 2150 4434")]
-    [InlineData("4532289052809181")]
-    [InlineData("5530016454538418")]
-    [InlineData("5551561443896215")]
-    [InlineData("5131208517986691")]
-    public void ValidateCard_WhenGivenCorrectNumber_ReturnsTrue(string creditCardNumber, string expected)
+    [InlineData("4024-0071-6540-1778", "Visa")]
+    [InlineData("4532 2080 2150 4434", "Visa")]
+    [InlineData("4532289052809181", "Visa")]
+    [InlineData("5530016454538418", "MasterCard")]
+    [InlineData("5551561443896215", "MasterCard")]
+    [InlineData("5131208517986691", "MasterCard")]
+    public void ValidateCard_WhenGivenCorrectName_ReturnsTrue(string creditCardNumber, string expected)
     {
         // Arrange
         var creditCardService = new CreditCardServices();
 
         // Act
-        var result = creditCardService.ValidateCardNumber(creditCardNumber);
+        var result = creditCardService.GetCardType(creditCardNumber);
 
         // Assert
-        Assert.True(result);
+        Assert.Equal(result, expected);
     }
 }   
