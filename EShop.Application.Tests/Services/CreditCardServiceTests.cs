@@ -40,15 +40,15 @@ public class CreditCardServiceTests
     }
 
     [Theory]
-    [InlineData("3497 7965 8312 797")]
-    [InlineData("345-470-784-783-010")]
-    [InlineData("378523393817437")]
-    [InlineData("4024-0071-6540-1778")]
-    [InlineData("4532 2080 2150 4434")]
-    [InlineData("4532289052809181")]
-    [InlineData("5530016454538418")]
-    [InlineData("5551561443896215")]
-    [InlineData("5131208517986691")]
+    [InlineData("3497 7965 8312 797 9881 2")]
+    [InlineData("345-470-784-783-010  33442")]
+    [InlineData("37852339381743798765")]
+    [InlineData("4024-0071-6540-1778-9213-2222")]
+    [InlineData("4532 2080 2150 4434         11-22-22")]
+    [InlineData("4532289052809181 333 - 2222")]
+    [InlineData("553001645453841833312")]
+    [InlineData("55515614438962153322")]
+    [InlineData("5131208517986691456-2- ")]
     public void ValidateCard_WhenGivenTooLongNumber_ReturnsFalse(string creditCardNumber)
     {
         // Arrange
@@ -62,15 +62,15 @@ public class CreditCardServiceTests
     }
 
     [Theory]
-    [InlineData("3497 7965 8312 797")]
-    [InlineData("345-470-784-783-010")]
-    [InlineData("378523393817437")]
-    [InlineData("4024-0071-6540-1778")]
-    [InlineData("4532 2080 2150 4434")]
-    [InlineData("4532289052809181")]
-    [InlineData("5530016454538418")]
-    [InlineData("5551561443896215")]
-    [InlineData("5131208517986691")]
+    [InlineData("3497 7965 8312 ")]
+    [InlineData("345-470-784- 83  ")]
+    [InlineData("37")]
+    [InlineData("    ")]
+    [InlineData("4532 2080 21------")]
+    [InlineData("453225280918")]
+    [InlineData("553001645453   ")]
+    [InlineData("")]
+    [InlineData("5")]
     public void ValidateCard_WhenGivenTooShortNumber_ReturnsFalse(string creditCardNumber)
     {
         // Arrange

@@ -6,8 +6,16 @@ public class CreditCardServices
 {
     public bool ValidateCardNumber(string cardNumber)
     {
-        cardNumber = cardNumber.Replace(" ", "");
-        if (!cardNumber.All(char.IsDigit) || cardNumber.Length < 13 || cardNumber.Length > 19)
+        cardNumber = cardNumber.Replace(" ", "").Replace("-", "");
+
+        if (cardNumber.Length < 13)
+            return false;
+
+        if (cardNumber.Length > 19)
+            return false;
+
+        
+        if (!cardNumber.All(char.IsDigit))
             return false;
 
         int sum = 0;
@@ -37,6 +45,7 @@ public class CreditCardServices
 
         if (Regex.IsMatch(cardNumber, @"^4(\d{12}|\d{15}|\d{18})$"))
             return "Visa";
+
         else if (Regex.IsMatch(cardNumber, @"^(5[1-5]\d{14}|2(2[2-9][1-9]|2[3-9]\d{2}|[3-6]\d{3}|7([01]\d{2}|20\d))\d{10})$"))
             return "MasterCard";
 
