@@ -11,12 +11,14 @@
 //MethodName_Scenario_ExpectedBehavior
 
 using EShop.Application.Services;
+using EShop.Domain.Exceptions.CardNumber;
+using System;
 
 namespace EShop.Application.Tests.Services;
 
 public class CreditCardServiceTests
 {
-
+    // ---------------------------------------------------------ALL VALID---------------------------------------------------------
     [Theory]
     [InlineData("3497 7965 8312 797")]
     [InlineData("345-470-784-783-010")]
@@ -39,49 +41,6 @@ public class CreditCardServiceTests
         Assert.True(result);
     }
 
-    [Theory]
-    [InlineData("3497 7965 8312 797 9881 2")]
-    [InlineData("345-470-784-783-010  33442")]
-    [InlineData("37852339381743798765")]
-    [InlineData("4024-0071-6540-1778-9213-2222")]
-    [InlineData("4532 2080 2150 4434         11-22-22")]
-    [InlineData("4532289052809181 333 - 2222")]
-    [InlineData("553001645453841833312")]
-    [InlineData("55515614438962153322")]
-    [InlineData("5131208517986691456-2- ")]
-    public void ValidateCard_WhenGivenTooLongNumber_ReturnsFalse(string creditCardNumber)
-    {
-        // Arrange
-        var creditCardService = new CreditCardServices();
-
-        // Act
-        var result = creditCardService.ValidateCardNumber(creditCardNumber);
-
-        // Assert
-        Assert.False(result);
-    }
-
-    [Theory]
-    [InlineData("3497 7965 8312 ")]
-    [InlineData("345-470-784- 83  ")]
-    [InlineData("37")]
-    [InlineData("    ")]
-    [InlineData("4532 2080 21------")]
-    [InlineData("453225280918")]
-    [InlineData("553001645453   ")]
-    [InlineData("")]
-    [InlineData("5")]
-    public void ValidateCard_WhenGivenTooShortNumber_ReturnsFalse(string creditCardNumber)
-    {
-        // Arrange
-        var creditCardService = new CreditCardServices();
-
-        // Act
-        var result = creditCardService.ValidateCardNumber(creditCardNumber);
-
-        // Assert
-        Assert.False(result);
-    }
 
     [Theory]
     [InlineData("3497 7965 8312 797", "American Express")]
@@ -104,4 +63,76 @@ public class CreditCardServiceTests
         // Assert
         Assert.Equal(result, expected);
     }
-}   
+    // ---------------------------------------------------------------------------------------------------------------------------
+
+
+    // --------------------------------------------------------ALL INVALID--------------------------------------------------------
+    [Theory]
+    [InlineData("3497 7965 8312 ")]
+    [InlineData("345-470-784- 83  ")]
+    [InlineData("37")]
+    [InlineData("    ")]
+    [InlineData("4532 2080 21------")]
+    [InlineData("453225280918")]
+    [InlineData("553001645453   ")]
+    [InlineData("")]
+    [InlineData("5")]
+    public void ValidateCard_WhenGivenTooShortNumber_ThrowsCardNumberTooShortException(string creditCardNumber)
+    {
+        // Arrange
+        var creditCardService = new CreditCardServices();
+
+        // Act
+        var exception = Assert.Throws<CardNumberTooShortException>(() => creditCardService.ValidateCardNumber(creditCardNumber));
+
+        // Assert
+        Assert.Equal("Credit card number is too short", exception.Message);
+    }
+
+
+    [Theory]
+    [InlineData("3497 7965 8312 797 9881 2")]
+    [InlineData("345-470-784-783-010  33442")]
+    [InlineData("37852339381743798765")]
+    [InlineData("4024-0071-6540-1778-9213-2222")]
+    [InlineData("4532 2080 2150 4434         11-22-22")]
+    [InlineData("4532289052809181 333 - 2222")]
+    [InlineData("553001645453841833312")]
+    [InlineData("55515614438962153322")]
+    [InlineData("5131208517986691456-2- ")]
+    public void ValidateCard_WhenGivenTooLongNumber_ThrowsCardNumberTooLongException(string creditCardNumber)
+    {
+        // Arrange
+        var creditCardService = new CreditCardServices();
+
+        // Act
+        var exception = Assert.Throws<CardNumberTooLongException>(() => creditCardService.ValidateCardNumber(creditCardNumber));
+
+        // Assert
+        Assert.Equal("Credit card number is too long", exception.Message);
+    }
+
+
+    [Theory]
+    [InlineData("3497 7965 8CA2 797")]
+    [InlineData("345-470-7B4-783-010")]
+    [InlineData("37DD523393817437")]
+    [InlineData("4''4-0071-6540-1778")]
+    [InlineData("45*2 2080 2150 4434")]
+    [InlineData("45322890__2809181")]
+    [InlineData("553[016454538418")]
+    [InlineData("5551561==443896215")]
+    [InlineData("$$31208517986691")]
+    public void ValidateCard_WhenGivenInvalidCharacters_ThrowsCardNumberInvalidException(string creditCardNumber)
+    {
+        // Arrange
+        var creditCardService = new CreditCardServices();
+
+        // Act
+        var exception = Assert.Throws<CardNumberInvalidException>(() => creditCardService.ValidateCardNumber(creditCardNumber));
+
+        // Assert
+        Assert.Equal("Credit card number has invalid characters", exception.Message);
+    }
+    // -------------------------------------------------------------------------------------------------------------------------------
+}

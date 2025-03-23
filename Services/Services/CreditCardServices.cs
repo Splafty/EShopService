@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using EShop.Domain.Exceptions.CardNumber;
 
 namespace EShop.Application.Services;
 
@@ -9,14 +10,14 @@ public class CreditCardServices
         cardNumber = cardNumber.Replace(" ", "").Replace("-", "");
 
         if (cardNumber.Length < 13)
-            return false;
+            throw new CardNumberTooShortException("Credit card number is too short");
 
         if (cardNumber.Length > 19)
-            return false;
+            throw new CardNumberTooLongException("Credit card number is too long");
 
-        
         if (!cardNumber.All(char.IsDigit))
-            return false;
+            throw new CardNumberInvalidException("Credit card number has invalid characters");
+
 
         int sum = 0;
         bool alternate = false;
@@ -36,7 +37,14 @@ public class CreditCardServices
             alternate = !alternate;
         }
 
-        return (sum % 10 == 0);
+        if (sum % 10 == 0)
+        {
+            return true;
+        }
+        else
+        {
+            throw new CardNumberInvalidException("Credit card number is invalid");
+        }
     }
 
     public string GetCardType(string cardNumber)
