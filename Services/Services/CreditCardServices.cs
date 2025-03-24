@@ -3,7 +3,7 @@ using EShop.Domain.Exceptions.CardNumber;
 
 namespace EShop.Application.Services;
 
-public class CreditCardServices
+public class CreditCardServices : ICreditCardServices
 {
     public bool ValidateCardNumber(string cardNumber)
     {

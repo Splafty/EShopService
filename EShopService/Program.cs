@@ -1,4 +1,5 @@
 using EShop.Application.Services;
+using EShop.Domain.Seeders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,9 +9,14 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<CreditCardServices>();
+builder.Services.AddScoped<ICreditCardServices, CreditCardServices>();
 
 var app = builder.Build();
+
+// Reszta kodu bez zmian
+var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<IEShopSeeder>();
+await seeder.Seed();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

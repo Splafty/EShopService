@@ -10,9 +10,9 @@ namespace EShopService.Controllers;
 [Route("api/[controller]")]
 public class CreditCardController : ControllerBase
 {
-    private readonly CreditCardServices _creditCardServices;
+    private readonly ICreditCardServices _creditCardServices;
 
-    public CreditCardController(CreditCardServices creditCardServices)
+    public CreditCardController(ICreditCardServices creditCardServices)
     {
         _creditCardServices = creditCardServices;
     }
