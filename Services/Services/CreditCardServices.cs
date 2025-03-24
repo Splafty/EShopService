@@ -73,6 +73,6 @@ public class CreditCardServices
             return "Maestro";
 
         else
-            return "Unknown";
+            throw new UnsupportedCardProviderException("Unsupported card provider");
     }
 }
