@@ -14,4 +14,12 @@ public interface IProductRepository
     void Add(Product product);
     void Update(Product product);
     void Delete(int id);
+
+    
+    #region Product
+    Task<Product> GetProductAsync(int id);
+    Task<Product> AddProductAsync(Product product);
+    Task<Product> UpdateProductAsync(Product user);
+    Task<List<Product>> GetAllProductAsync();
+    #endregion
 }
