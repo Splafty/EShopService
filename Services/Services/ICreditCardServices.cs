@@ -8,6 +8,6 @@ namespace EShop.Application.Services;
 
 public interface ICreditCardServices
 {
-    bool ValidateCardNumber(string cardNumber);
-    string GetCardType(string cardNumber);
+    public bool ValidateCardNumber(string cardNumber);
+    public string GetCardType(string cardNumber);
 }
